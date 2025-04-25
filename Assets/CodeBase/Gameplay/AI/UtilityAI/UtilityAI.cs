@@ -16,18 +16,22 @@ namespace CodeBase.Gameplay.AI.UtilityAI
         private readonly ITargetPicker _targetPicker;
         private readonly IHeroRegistry _heroRegistry;
 
+        private IEnumerable<IUtilityFunction> _utilityFunctions;
+
         public UtilityAI(IStaticDataService staticDataService, ITargetPicker targetPicker, IHeroRegistry heroRegistry)
         {
             _staticDataService = staticDataService;
             _targetPicker = targetPicker;
             _heroRegistry = heroRegistry;
+
+            _utilityFunctions = new Brains().GetUtilityFunctions();
         }
 
         public HeroAction MakeBestDecision(IHero readyHero)
         {
             var choices = GetScoredHeroActions(readyHero, GetReadyBattleSkills(readyHero));
 
-            return choices.FindMax(x => x.score);
+            return choices.FindMax(x => x.Score);
         }
 
         private IEnumerable<BattleSkill> GetReadyBattleSkills(IHero readyHero)
@@ -49,9 +53,42 @@ namespace CodeBase.Gameplay.AI.UtilityAI
             {
                 foreach (var heroSet in HeroSetsForSkill(skill, readyHero))
                 {
-                    
+                    float? score = CalculateScore(skill, heroSet);
+
+                    if (score.HasValue == false)
+                    {
+                        continue;
+                    }
+
+                    yield return new ScoredAction(readyHero, skill, heroSet.targets, score.Value);
                 }
             }
+        }
+
+        private float? CalculateScore(BattleSkill skill, HeroSet heroSet)
+        {
+            if (heroSet.targets.IsNullOrEmpty())
+            {
+                return null;
+            }
+            
+            return heroSet.targets
+                .Select(hero => CalculateScore(skill, hero))
+                .Where(x => x != null)
+                .Sum();
+        }
+
+        private float? CalculateScore(BattleSkill skill, IHero hero)
+        {
+            IEnumerable<ScoreFactor> scoreFactors = 
+                from utilityFunction in _utilityFunctions
+                where utilityFunction.AppliesTo(skill, hero)
+                let input = utilityFunction.GetInput(skill, hero)
+                let score = utilityFunction.Score(input, hero)
+
+                select new ScoreFactor(utilityFunction.Name, score);
+
+            return scoreFactors.Select(x => x.Score).SumOrNull();
         }
 
         private IEnumerable<HeroSet> HeroSetsForSkill(BattleSkill skill, IHero readyHero)
