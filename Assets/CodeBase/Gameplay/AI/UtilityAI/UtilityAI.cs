@@ -5,6 +5,7 @@ using CodeBase.Extensions;
 using CodeBase.Gameplay.Battle;
 using CodeBase.Gameplay.Heroes;
 using CodeBase.Gameplay.HeroRegistry;
+using CodeBase.Gameplay.Skills;
 using CodeBase.Gameplay.Skills.Targeting;
 using CodeBase.Infrastructure.StaticData;
 
@@ -15,14 +16,16 @@ namespace CodeBase.Gameplay.AI.UtilityAI
         private readonly IStaticDataService _staticDataService;
         private readonly ITargetPicker _targetPicker;
         private readonly IHeroRegistry _heroRegistry;
+        private readonly ISkillSolver _skillSolver;
 
         private IEnumerable<IUtilityFunction> _utilityFunctions;
 
-        public UtilityAI(IStaticDataService staticDataService, ITargetPicker targetPicker, IHeroRegistry heroRegistry)
+        public UtilityAI(IStaticDataService staticDataService, ITargetPicker targetPicker, IHeroRegistry heroRegistry, ISkillSolver skillSolver)
         {
             _staticDataService = staticDataService;
             _targetPicker = targetPicker;
             _heroRegistry = heroRegistry;
+            _skillSolver = skillSolver;
 
             _utilityFunctions = new Brains().GetUtilityFunctions();
         }
@@ -44,6 +47,7 @@ namespace CodeBase.Gameplay.AI.UtilityAI
                     typeId = x.TypeId,
                     kind = _staticDataService.HeroSkillFor(x.TypeId, readyHero.TypeId).Kind,
                     targetType = _staticDataService.HeroSkillFor(x.TypeId, readyHero.TypeId).TargetType,
+                    maxCooldown = x.MaxCooldown
                 });
         }
 
@@ -83,7 +87,7 @@ namespace CodeBase.Gameplay.AI.UtilityAI
             IEnumerable<ScoreFactor> scoreFactors = 
                 from utilityFunction in _utilityFunctions
                 where utilityFunction.AppliesTo(skill, hero)
-                let input = utilityFunction.GetInput(skill, hero)
+                let input = utilityFunction.GetInput(skill, hero, _skillSolver)
                 let score = utilityFunction.Score(input, hero)
 
                 select new ScoreFactor(utilityFunction.Name, score);

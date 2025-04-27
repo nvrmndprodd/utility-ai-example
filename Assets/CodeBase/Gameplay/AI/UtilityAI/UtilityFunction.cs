@@ -1,19 +1,20 @@
 using System;
 using CodeBase.Gameplay.Heroes;
+using CodeBase.Gameplay.Skills;
 
 namespace CodeBase.Gameplay.AI.UtilityAI
 {
     public class UtilityFunction : IUtilityFunction
     {
         private readonly Func<BattleSkill, IHero, bool> _appliesTo;
-        private readonly Func<BattleSkill, IHero, float> _getInput;
+        private readonly Func<BattleSkill, IHero, ISkillSolver, float> _getInput;
         private readonly Func<float, IHero, float> _score;
         public string Name { get; }
 
         public UtilityFunction(
             string name,
             Func<BattleSkill, IHero, bool> appliesTo,
-            Func<BattleSkill, IHero, float> getInput,
+            Func<BattleSkill, IHero, ISkillSolver, float> getInput,
             Func<float, IHero, float> score)
         {
             Name = name;
@@ -27,9 +28,9 @@ namespace CodeBase.Gameplay.AI.UtilityAI
             return _appliesTo(skill, hero);
         }
 
-        public float GetInput(BattleSkill skill, IHero hero)
+        public float GetInput(BattleSkill skill, IHero hero, ISkillSolver skillSolver)
         {
-            return _getInput(skill, hero);
+            return _getInput(skill, hero, skillSolver);
         }
 
         public float Score(float input, IHero hero)

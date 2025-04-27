@@ -45,6 +45,13 @@ namespace CodeBase.Gameplay.Skills.SkillAppliers
             }
         }
 
+        public float CalculateSkillValue(string casterId, SkillTypeId skillTypeId, string targetId)
+        {
+            HeroBehaviour caster = _heroRegistry.GetHero(casterId);
+            HeroSkill skill = _staticDataService.HeroSkillFor(skillTypeId, caster.TypeId);
+            return skill.Value;
+        }
+
         private void PlayFx(GameObject fxPrefab, Vector3 position)
         {
             if (fxPrefab)

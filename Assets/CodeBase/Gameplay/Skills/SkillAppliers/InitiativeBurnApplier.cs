@@ -53,6 +53,15 @@ namespace CodeBase.Gameplay.Skills.SkillAppliers
         {
             _fXPrefab = Resources.Load<GameObject>(FXPrefabPath);
         }
+    
+        public float CalculateSkillValue(string casterId, SkillTypeId skillTypeId, string targetId)
+        {
+            HeroBehaviour caster = _heroRegistry.GetHero(casterId);
+            HeroBehaviour target = _heroRegistry.GetHero(targetId);
+            HeroSkill skill = _staticDataService.HeroSkillFor(skillTypeId, caster.TypeId);
+      
+            return target.State.MaxInitiative * skill.Value;
+        }
 
         private void PlayFx(Vector3 targetPosition)
         {
