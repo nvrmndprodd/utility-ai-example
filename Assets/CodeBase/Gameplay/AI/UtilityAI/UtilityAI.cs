@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Extensions;
+using CodeBase.Gameplay.AI.Reporting;
 using CodeBase.Gameplay.Battle;
 using CodeBase.Gameplay.Heroes;
 using CodeBase.Gameplay.HeroRegistry;
@@ -17,22 +18,31 @@ namespace CodeBase.Gameplay.AI.UtilityAI
         private readonly ITargetPicker _targetPicker;
         private readonly IHeroRegistry _heroRegistry;
         private readonly ISkillSolver _skillSolver;
+        private readonly IAIReporter _aiReporter;
 
         private IEnumerable<IUtilityFunction> _utilityFunctions;
 
-        public UtilityAI(IStaticDataService staticDataService, ITargetPicker targetPicker, IHeroRegistry heroRegistry, ISkillSolver skillSolver)
+        public UtilityAI(
+            IStaticDataService staticDataService, 
+            ITargetPicker targetPicker, 
+            IHeroRegistry heroRegistry, 
+            ISkillSolver skillSolver, 
+            IAIReporter aiReporter)
         {
             _staticDataService = staticDataService;
             _targetPicker = targetPicker;
             _heroRegistry = heroRegistry;
             _skillSolver = skillSolver;
+            _aiReporter = aiReporter;
 
             _utilityFunctions = new Brains().GetUtilityFunctions();
         }
 
         public HeroAction MakeBestDecision(IHero readyHero)
         {
-            var choices = GetScoredHeroActions(readyHero, GetReadyBattleSkills(readyHero));
+            var choices = GetScoredHeroActions(readyHero, GetReadyBattleSkills(readyHero)).ToList();
+            
+            _aiReporter.ReportDecisionScores(readyHero, choices);
 
             return choices.FindMax(x => x.Score);
         }
@@ -84,13 +94,17 @@ namespace CodeBase.Gameplay.AI.UtilityAI
 
         private float? CalculateScore(BattleSkill skill, IHero hero)
         {
-            IEnumerable<ScoreFactor> scoreFactors = 
-                from utilityFunction in _utilityFunctions
+            List<ScoreFactor> scoreFactors = 
+                (from utilityFunction in _utilityFunctions
                 where utilityFunction.AppliesTo(skill, hero)
+                
                 let input = utilityFunction.GetInput(skill, hero, _skillSolver)
                 let score = utilityFunction.Score(input, hero)
-
-                select new ScoreFactor(utilityFunction.Name, score);
+                
+                select new ScoreFactor(utilityFunction.Name, score))
+                .ToList();
+            
+            _aiReporter.ReportDecisionDetails(skill, hero, scoreFactors);
 
             return scoreFactors.Select(x => x.Score).SumOrNull();
         }

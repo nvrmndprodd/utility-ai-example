@@ -1,3 +1,5 @@
+using System;
+
 namespace CodeBase.Gameplay.AI.UtilityAI
 {
     public class ScoreFactor
@@ -9,6 +11,11 @@ namespace CodeBase.Gameplay.AI.UtilityAI
         {
             Name = name;
             Score = score;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} -> {(Score >= 0 ? "+" : string.Empty)}{Score}";
         }
     }
 }
