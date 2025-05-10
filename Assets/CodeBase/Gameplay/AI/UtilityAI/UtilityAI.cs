@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Extensions;
+using CodeBase.Gameplay.AI.MLAgents;
 using CodeBase.Gameplay.AI.Reporting;
 using CodeBase.Gameplay.Battle;
 using CodeBase.Gameplay.Heroes;
@@ -36,6 +37,8 @@ namespace CodeBase.Gameplay.AI.UtilityAI
             _aiReporter = aiReporter;
 
             _utilityFunctions = new Brains().GetUtilityFunctions();
+            
+            BattleAgent.Instance.InitializeDependencies(heroRegistry, staticDataService, skillSolver);
         }
 
         public HeroAction MakeBestDecision(IHero readyHero)

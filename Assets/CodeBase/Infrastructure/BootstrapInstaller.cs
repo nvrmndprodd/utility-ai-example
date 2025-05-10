@@ -1,3 +1,4 @@
+using System;
 using CodeBase.Gameplay.AI;
 using CodeBase.Gameplay.AI.FSM;
 using CodeBase.Gameplay.AI.Reporting;
@@ -31,12 +32,11 @@ namespace CodeBase.Infrastructure
             Container.Bind<IHeroFactory>().To<HeroFactory>().AsSingle();
             Container.Bind<IHeroRegistry>().To<HeroRegistry>().AsSingle();
             Container.Bind<IAIReporter>().To<AIReporter>().AsSingle();
-
-
+            
             Container.Bind<IDeathService>().To<DeathService>().AsSingle();
             Container.Bind<IInitiativeService>().To<InitiativeService>().AsSingle();
             Container.Bind<ITargetPicker>().To<TargetPicker>().AsSingle();
-            Container.Bind<IArtificialIntelligence>().To<FSM>().AsSingle();
+            Container.Bind<IArtificialIntelligence>().To<UtilityAI>().AsSingle();
         }
 
         public void Initialize()

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Gameplay.AI;
+using CodeBase.Gameplay.AI.MLAgents;
+using CodeBase.Gameplay.AI.UtilityAI;
 using CodeBase.Gameplay.Cooldowns;
 using CodeBase.Gameplay.Death;
 using CodeBase.Gameplay.Heroes;
@@ -10,13 +12,14 @@ using CodeBase.Gameplay.Initiative;
 using CodeBase.Gameplay.Skills;
 using CodeBase.StaticData.Skills;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace CodeBase.Gameplay.Battle
 {
     public class BattleConductor : IBattleConductor, ITickable
     {
-        private const float TurnTickDuration = 0.3f;
+        private const float TurnTickDuration = 0.05f;
 
         private readonly IHeroRegistry _heroRegistry;
         private readonly IDeathService _deathService;
@@ -31,7 +34,7 @@ namespace CodeBase.Gameplay.Battle
 
         private bool _turnTimerPaused;
 
-        public BattleMode Mode { get; private set; } = BattleMode.Manual;
+        public BattleMode Mode { get; private set; } = BattleMode.Auto;
 
         public event Action<HeroAction> HeroActionProduced;
 
@@ -56,7 +59,7 @@ namespace CodeBase.Gameplay.Battle
         {
             if (!_started || _finished)
                 return;
-
+            
             UpdateTurnTimer();
             _skillSolver.SkillDelaysTick();
             _deathService.ProcessDeadHeroes();
@@ -91,7 +94,7 @@ namespace CodeBase.Gameplay.Battle
 
         private void Finish()
         {
-            _finished = true;
+            SceneManager.LoadScene(1);
         }
 
         private void UpdateTurnTimer()
@@ -133,16 +136,22 @@ namespace CodeBase.Gameplay.Battle
                 }
         }
 
-        public void PerformHeroAction(HeroBehaviour readyHero)
+        public async void PerformHeroAction(HeroBehaviour readyHero)
         {
-            var heroAction = _artificialIntelligence.MakeBestDecision(readyHero);
-
-            // var chosenAction = new HeroAction
-            // {
-            //   Skill = TempSkill(readyHero),
-            //   Caster = readyHero,
-            //   TargetIds = TempTargets(readyHero) 
-            // };
+            HeroAction heroAction;
+            
+            /*if (_heroRegistry.FirstTeam.Contains(readyHero.Id) && _heroRegistry.FirstTeam.IndexOf(readyHero.Id) == 0)
+            {
+                BattleAgent.Instance.LoadCharacterData(readyHero);
+                heroAction = await BattleAgent.Instance.GetAction();
+            }
+            else
+            {
+                heroAction = _artificialIntelligence.MakeBestDecision(readyHero);
+            }*/
+            
+            BattleAgent.Instance.LoadCharacterData(readyHero);
+            heroAction = await BattleAgent.Instance.GetAction();
 
             _skillSolver.ProcessHeroAction(heroAction);
 
