@@ -18,7 +18,7 @@ namespace CodeBase.Gameplay.AI.UtilityAI.Calculations
         public static float KillingBlow(BattleSkill skill, IHero target, ISkillSolver skillSolver)
         {
             var damage = SkillValue(skill, target, skillSolver);
-            return damage > target.State.MaxHp ? TRUE : FALSE;
+            return damage > target.State.CurrentHp ? TRUE : FALSE;
         }
 
         public static float PercentageHp(BattleSkill skill, IHero target, ISkillSolver skillSolver)

@@ -5,14 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d85eaf36-cee1-485d-9fc4-aeeaaf45e301" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/BehaviourTree.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/BehaviourTree/BehaviourTree.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/BehaviourTree/BehaviourTree.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/FSM.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/FSM/FSM.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/FSM/FSM.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.utility-ai-example/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.utility-ai-example/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/AIReporter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/AIReporter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/DecisionDetails.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/DecisionDetails.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/DecisionScores.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/DecisionScores.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/IAIReporter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/IAIReporter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/ScoreFactor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/ScoreFactor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/ScoredAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/ScoredAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/UtilityAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/UtilityAI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/Calculations/GetInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/UtilityAI/Calculations/GetInput.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Infrastructure/BootstrapInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Infrastructure/BootstrapInstaller.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -130,7 +130,10 @@
       <workItem from="1745576274326" duration="1445000" />
       <workItem from="1745671400477" duration="8751000" />
       <workItem from="1745750419210" duration="2092000" />
-      <workItem from="1745752547164" duration="684000" />
+      <workItem from="1745752547164" duration="717000" />
+      <workItem from="1746034913629" duration="2049000" />
+      <workItem from="1746084971906" duration="3121000" />
+      <workItem from="1746865855092" duration="8520000" />
     </task>
     <task id="LOCAL-00001" summary="update project version to 6.0.47">
       <option name="closed" value="true" />
