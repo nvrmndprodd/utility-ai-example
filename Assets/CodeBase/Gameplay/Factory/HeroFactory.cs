@@ -34,7 +34,7 @@ namespace CodeBase.Gameplay.Factory
                     .With(x => x.MaxHp = config.Hp)
                     .With(x => x.CurrentHp = config.Hp)
                     .With(x => x.MaxInitiative = config.Initiative)
-                    .With(x => x.CurrentInitiative = Random.Range(0, config.Initiative))
+                    .With(x => x.CurrentInitiative = Random.Range(0, config.Initiative / 2))
                     .With(x => x.Armor = config.Armor)
                     .With(x => x.SkillStates = config.Skills.Select(SkillState.FromHeroSkill).ToList()),
                 turned,

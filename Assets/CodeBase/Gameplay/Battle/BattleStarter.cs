@@ -32,20 +32,37 @@ namespace CodeBase.Gameplay.Battle
 
         private void SetupFirstTeam(SlotSetupBehaviour slotSetup)
         {
-            foreach (var slot in slotSetup.FirstTeamSlots)
+            for (var i = 0; i < slotSetup.FirstTeamSlots.Count; i++)
             {
-                var hero = _heroFactory.CreateHeroAt(RandomHeroTypeId(), slot, slot.Turned);
+                var slot = slotSetup.FirstTeamSlots[i];
+                var hero = _heroFactory.CreateHeroAt(GetHeroType(i), slot, slot.Turned);
                 _heroRegistry.RegisterFirstTeamHero(hero);
             }
         }
 
         private void SetupSecondTeam(SlotSetupBehaviour slotSetup)
         {
-            foreach (var slot in slotSetup.SecondTeamSlots)
+            for (var i = 0; i < slotSetup.SecondTeamSlots.Count; i++)
             {
-                var hero = _heroFactory.CreateHeroAt(RandomHeroTypeId(), slot, slot.Turned);
+                var slot = slotSetup.SecondTeamSlots[i];
+                var hero = _heroFactory.CreateHeroAt(GetHeroType(i), slot, slot.Turned);
                 _heroRegistry.RegisterSecondTeamHero(hero);
             }
+        }
+
+        private static HeroTypeId GetHeroType(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return HeroTypeId.Angel;
+                case 1:
+                    return HeroTypeId.FireMage;
+                case 2:
+                    return HeroTypeId.Reaper;
+            }
+
+            throw new Exception("Index out of bounds");
         }
 
         private static HeroTypeId RandomHeroTypeId()

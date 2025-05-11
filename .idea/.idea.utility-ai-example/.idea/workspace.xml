@@ -5,21 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d85eaf36-cee1-485d-9fc4-aeeaaf45e301" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector/IMetricsService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector/IMetricsService.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector/Metrics.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector/Metrics.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector/MetricsService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/CodeBase/MetricsCollector/MetricsService.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.utility-ai-example/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.utility-ai-example/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/MLAgents/BattleAgent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/MLAgents/BattleAgent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/AIReporter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/AI/Reporting/AIReporter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Battle/BattleConductor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Battle/BattleConductor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Death/DeathService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Death/DeathService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Skills/SkillAppliers/HealApplier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Skills/SkillAppliers/HealApplier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/UI/DebugWindow/DebugWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/UI/DebugWindow/DebugWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Infrastructure/BootstrapInstaller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Infrastructure/BootstrapInstaller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Battle/BattleStarter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Battle/BattleStarter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Factory/HeroFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CodeBase/Gameplay/Factory/HeroFactory.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ML-Agents/Timers/Game_timers.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ML-Agents/Timers/Game_timers.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ML-Agents/Timers/Initial_timers.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ML-Agents/Timers/Initial_timers.json" afterDir="false" />
     </list>
@@ -180,7 +170,7 @@
       <workItem from="1746900012697" duration="61000" />
       <workItem from="1746902556092" duration="229000" />
       <workItem from="1746902932149" duration="173000" />
-      <workItem from="1746961198876" duration="9684000" />
+      <workItem from="1746961198876" duration="13875000" />
     </task>
     <task id="LOCAL-00001" summary="update project version to 6.0.47">
       <option name="closed" value="true" />

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CodeBase.Gameplay.AI;
+using CodeBase.Gameplay.AI.FSM;
 using CodeBase.Gameplay.AI.MLAgents;
+using CodeBase.Gameplay.AI.Reporting;
 using CodeBase.Gameplay.AI.UtilityAI;
 using CodeBase.Gameplay.Cooldowns;
 using CodeBase.Gameplay.Death;
@@ -11,6 +13,8 @@ using CodeBase.Gameplay.Heroes;
 using CodeBase.Gameplay.HeroRegistry;
 using CodeBase.Gameplay.Initiative;
 using CodeBase.Gameplay.Skills;
+using CodeBase.Gameplay.Skills.Targeting;
+using CodeBase.Infrastructure.StaticData;
 using CodeBase.MetricsCollector;
 using CodeBase.StaticData.Skills;
 using UnityEngine;
@@ -21,7 +25,7 @@ namespace CodeBase.Gameplay.Battle
 {
     public class BattleConductor : IBattleConductor, ITickable
     {
-        public const int FIGHTS = 10;
+        public const int FIGHTS = 500;
         
         private const float TurnTickDuration = 0.05f;
 
@@ -31,7 +35,9 @@ namespace CodeBase.Gameplay.Battle
         private readonly ICooldownService _cooldownService;
         private readonly ISkillSolver _skillSolver;
         private readonly IMetricsService _metrics;
-        private readonly IArtificialIntelligence _artificialIntelligence;
+        
+        private readonly IArtificialIntelligence _leftTeamAI;
+        private readonly IArtificialIntelligence _rightTeamAI;
 
         private float _untilNextTurnTick;
         private bool _started;
@@ -49,12 +55,13 @@ namespace CodeBase.Gameplay.Battle
             IHeroRegistry heroRegistry,
             IDeathService deathService,
             IInitiativeService initiativeService,
-            IArtificialIntelligence artificialIntelligence,
             ICooldownService cooldownService,
             ISkillSolver skillSolver,
-            IMetricsService metrics)
+            IMetricsService metrics,
+            IStaticDataService staticDataService,
+            ITargetPicker targetPicker,
+            IAIReporter aiReporter)
         {
-            _artificialIntelligence = artificialIntelligence;
             _skillSolver = skillSolver;
             _metrics = metrics;
             _heroRegistry = heroRegistry;
@@ -62,6 +69,9 @@ namespace CodeBase.Gameplay.Battle
             _deathService = deathService;
             _initiativeService = initiativeService;
             _cooldownService = cooldownService;
+
+            _leftTeamAI = new UtilityAI(staticDataService, targetPicker, heroRegistry, skillSolver, aiReporter);
+            _rightTeamAI = new BehaviourTree(staticDataService, heroRegistry);
         }
 
         public async void Tick()
@@ -111,6 +121,10 @@ namespace CodeBase.Gameplay.Battle
             {
                 SceneManager.LoadScene(1);
             }
+            else
+            {
+                _finished = true;
+            }
         }
 
         private async Task UpdateTurnTimer()
@@ -156,18 +170,24 @@ namespace CodeBase.Gameplay.Battle
         {
             HeroAction heroAction;
             
-            /*if (_heroRegistry.FirstTeam.Contains(readyHero.Id) && _heroRegistry.FirstTeam.IndexOf(readyHero.Id) == 0)
+            /*if (_heroRegistry.SecondTeam.Contains(readyHero.Id))
             {
                 BattleAgent.Instance.LoadCharacterData(readyHero);
                 heroAction = await BattleAgent.Instance.GetAction();
             }
             else
             {
-                heroAction = _artificialIntelligence.MakeBestDecision(readyHero);
+                heroAction = _leftTeamAI.MakeBestDecision(readyHero);
             }*/
             
-            BattleAgent.Instance.LoadCharacterData(readyHero);
-            heroAction = await BattleAgent.Instance.GetAction();
+            if (_heroRegistry.SecondTeam.Contains(readyHero.Id))
+            {
+                heroAction = _rightTeamAI.MakeBestDecision(readyHero);
+            }
+            else
+            {
+                heroAction = _leftTeamAI.MakeBestDecision(readyHero);
+            }
 
             _metrics.HeroPerformedAction(heroAction);
             

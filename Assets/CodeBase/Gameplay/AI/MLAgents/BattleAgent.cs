@@ -87,6 +87,11 @@ namespace CodeBase.Gameplay.AI.MLAgents
 
         public override void CollectObservations(VectorSensor sensor)
         {
+            if (_heroRegistry.FirstTeam.Count == 0 || _heroRegistry.SecondTeam.Count == 0 || _taskCompletionSource == null)
+            {
+                return;
+            }
+            
             sensor.AddObservation(_hero.State.HpPercentage);
             sensor.AddObservation(_hero.State.Armor);
             sensor.AddObservation(_hero.State.InitiativePercentage);
@@ -134,6 +139,7 @@ namespace CodeBase.Gameplay.AI.MLAgents
             // Add skill information for each of 3 skills
             foreach (var skillState in _hero.State.SkillStates)
             {
+                
                 var skillData = _staticDataService.HeroSkillFor(skillState.TypeId, _hero.TypeId);
 
                 // SkillKind enum as integer
@@ -160,7 +166,7 @@ namespace CodeBase.Gameplay.AI.MLAgents
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            if (_heroRegistry.FirstTeam.Count == 0 || _heroRegistry.SecondTeam.Count == 0)
+            if (_heroRegistry.FirstTeam.Count == 0 || _heroRegistry.SecondTeam.Count == 0 || _taskCompletionSource == null)
             {
                 return;
             }
@@ -241,6 +247,7 @@ namespace CodeBase.Gameplay.AI.MLAgents
             }
 
             _taskCompletionSource.SetResult(_decidedAction);
+            _taskCompletionSource = null;
         }
 
         private void CalculateReward()
