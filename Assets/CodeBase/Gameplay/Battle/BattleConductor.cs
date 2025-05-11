@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CodeBase.Gameplay.AI;
 using CodeBase.Gameplay.AI.MLAgents;
 using CodeBase.Gameplay.AI.UtilityAI;
@@ -10,6 +11,7 @@ using CodeBase.Gameplay.Heroes;
 using CodeBase.Gameplay.HeroRegistry;
 using CodeBase.Gameplay.Initiative;
 using CodeBase.Gameplay.Skills;
+using CodeBase.MetricsCollector;
 using CodeBase.StaticData.Skills;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +21,8 @@ namespace CodeBase.Gameplay.Battle
 {
     public class BattleConductor : IBattleConductor, ITickable
     {
+        public const int FIGHTS = 10;
+        
         private const float TurnTickDuration = 0.05f;
 
         private readonly IHeroRegistry _heroRegistry;
@@ -26,6 +30,7 @@ namespace CodeBase.Gameplay.Battle
         private readonly IInitiativeService _initiativeService;
         private readonly ICooldownService _cooldownService;
         private readonly ISkillSolver _skillSolver;
+        private readonly IMetricsService _metrics;
         private readonly IArtificialIntelligence _artificialIntelligence;
 
         private float _untilNextTurnTick;
@@ -33,6 +38,8 @@ namespace CodeBase.Gameplay.Battle
         private bool _finished;
 
         private bool _turnTimerPaused;
+
+        private int _counter;
 
         public BattleMode Mode { get; private set; } = BattleMode.Auto;
 
@@ -44,10 +51,12 @@ namespace CodeBase.Gameplay.Battle
             IInitiativeService initiativeService,
             IArtificialIntelligence artificialIntelligence,
             ICooldownService cooldownService,
-            ISkillSolver skillSolver)
+            ISkillSolver skillSolver,
+            IMetricsService metrics)
         {
             _artificialIntelligence = artificialIntelligence;
             _skillSolver = skillSolver;
+            _metrics = metrics;
             _heroRegistry = heroRegistry;
             _deathService = deathService;
             _deathService = deathService;
@@ -55,12 +64,12 @@ namespace CodeBase.Gameplay.Battle
             _cooldownService = cooldownService;
         }
 
-        public void Tick()
+        public async void Tick()
         {
             if (!_started || _finished)
                 return;
             
-            UpdateTurnTimer();
+            await UpdateTurnTimer();
             _skillSolver.SkillDelaysTick();
             _deathService.ProcessDeadHeroes();
             CheckBattleEnd();
@@ -69,6 +78,7 @@ namespace CodeBase.Gameplay.Battle
         public void Start()
         {
             _started = true;
+            _metrics.BattleStarted();
         }
 
         public void Stop()
@@ -94,10 +104,16 @@ namespace CodeBase.Gameplay.Battle
 
         private void Finish()
         {
-            SceneManager.LoadScene(1);
+            _counter++;
+            _metrics.BattleFinished();
+
+            if (_counter < FIGHTS)
+            {
+                SceneManager.LoadScene(1);
+            }
         }
 
-        private void UpdateTurnTimer()
+        private async Task UpdateTurnTimer()
         {
             if (_turnTimerPaused)
                 return;
@@ -105,16 +121,16 @@ namespace CodeBase.Gameplay.Battle
             _untilNextTurnTick -= Time.deltaTime;
             if (_untilNextTurnTick <= 0)
             {
-                TurnTick();
+                await TurnTick();
                 _untilNextTurnTick = TurnTickDuration;
             }
         }
 
-        private void TurnTick()
+        private async Task TurnTick()
         {
             _cooldownService.CooldownTick(TurnTickDuration);
             _initiativeService.ReplenishInitiativeTick();
-            ProcessReadyHeroes();
+            await ProcessReadyHeroes();
 
             if (_initiativeService.HeroIsReadyOnNextTick())
                 PauseInManualMode();
@@ -126,17 +142,17 @@ namespace CodeBase.Gameplay.Battle
                 Finish();
         }
 
-        private void ProcessReadyHeroes()
+        private async Task ProcessReadyHeroes()
         {
             foreach (var hero in _heroRegistry.AllActiveHeroes())
                 if (hero.IsReady)
                 {
                     hero.State.CurrentInitiative = 0;
-                    PerformHeroAction(hero);
+                    await PerformHeroAction(hero);
                 }
         }
 
-        public async void PerformHeroAction(HeroBehaviour readyHero)
+        public async Task PerformHeroAction(HeroBehaviour readyHero)
         {
             HeroAction heroAction;
             
@@ -153,6 +169,8 @@ namespace CodeBase.Gameplay.Battle
             BattleAgent.Instance.LoadCharacterData(readyHero);
             heroAction = await BattleAgent.Instance.GetAction();
 
+            _metrics.HeroPerformedAction(heroAction);
+            
             _skillSolver.ProcessHeroAction(heroAction);
 
             HeroActionProduced?.Invoke(heroAction);

@@ -1,5 +1,6 @@
 ﻿using CodeBase.Gameplay.Heroes;
 using CodeBase.Gameplay.HeroRegistry;
+using CodeBase.MetricsCollector;
 using UnityEngine;
 
 namespace CodeBase.Gameplay.Death
@@ -8,10 +9,12 @@ namespace CodeBase.Gameplay.Death
     {
         private const float DefaultDestroyTime = 3;
         private readonly IHeroRegistry _heroRegistry;
+        private readonly IMetricsService _metrics;
 
-        public DeathService(IHeroRegistry heroRegistry)
+        public DeathService(IHeroRegistry heroRegistry, IMetricsService metrics)
         {
             _heroRegistry = heroRegistry;
+            _metrics = metrics;
         }
 
         public void ProcessDeadHeroes()
@@ -22,6 +25,7 @@ namespace CodeBase.Gameplay.Death
                 if (!hero.IsDead)
                     continue;
 
+                _metrics.HeroDied(hero.Id);
                 _heroRegistry.Unregister(hero.Id);
 
                 hero.Animator.PlayDeath();

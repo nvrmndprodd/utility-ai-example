@@ -46,31 +46,31 @@ namespace CodeBase.Gameplay.UI.DebugWindow
 
         private void OnHeroActionProduced(HeroAction action)
         {
-            Instantiate(HeroActionEntryPrefab, EntriesRoot)
+            /*Instantiate(HeroActionEntryPrefab, EntriesRoot)
                 .With(x => x.HeroName.text = $"{action.Caster.TypeId} [{action.Caster.SlotNumber}]")
                 .With(x => x.SkillName.text = $"{action.Skill} ({action.SkillKind})")
                 .With(x => x.TargetsLine.text = action.TargetIds
                     .Aggregate(
                         "",
                         (current, id) =>
-                            current + $" {_registry.GetHero(id).TypeId} [{_registry.GetHero(id).SlotNumber}]"));
+                            current + $" {_registry.GetHero(id).TypeId} [{_registry.GetHero(id).SlotNumber}]"));*/
         }
 
         private void OnDecisionScoresProduced(DecisionScores scores)
         {
-            Instantiate(DecisionScoresEntryPrefab, EntriesRoot)
+            /*Instantiate(DecisionScoresEntryPrefab, EntriesRoot)
                 .With(x => x.HeroName.text = $"{scores.HeroName}")
                 .With(x => x.SkillName.text = $"")
-                .With(x => x.TargetsLine.text = scores.FormattedLine);
+                .With(x => x.TargetsLine.text = scores.FormattedLine);*/
         }
 
         private void OnDecisionDetailsProduced(DecisionDetails details)
         {
-            Instantiate(DecisionDetailsEntryPrefab, EntriesRoot)
+            /*Instantiate(DecisionDetailsEntryPrefab, EntriesRoot)
                 .With(x => x.HeroName.text = $"{details.CasterName}")
                 .With(x => x.TargetName.text = $"{details.TargetName}")
                 .With(x => x.SkillName.text = $"{details.SkillName}")
-                .With(x => x.TargetsLine.text = details.FormattedLine);
+                .With(x => x.TargetsLine.text = details.FormattedLine);*/
         }
     }
 }

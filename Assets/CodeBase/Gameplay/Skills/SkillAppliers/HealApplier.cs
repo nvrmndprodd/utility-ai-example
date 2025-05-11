@@ -41,6 +41,7 @@ namespace CodeBase.Gameplay.Skills.SkillAppliers
 
                 var healed = target.State.MaxHp * skill.Value;
                 target.State.CurrentHp += healed;
+                target.State.CurrentHp = Mathf.Min(target.State.CurrentHp, target.State.MaxHp);
 
                 _battleTextPlayer.PlayText($"+{healed}", Color.green, target.transform.position);
                 PlayFx(target.transform.position);

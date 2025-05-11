@@ -160,6 +160,10 @@ namespace CodeBase.Gameplay.AI.MLAgents
 
         public override void OnActionReceived(ActionBuffers actions)
         {
+            if (_heroRegistry.FirstTeam.Count == 0 || _heroRegistry.SecondTeam.Count == 0)
+            {
+                return;
+            }
             // Parse discrete actions
             int selectedSkillId = actions.DiscreteActions[0];
             int selectedTargetId = actions.DiscreteActions[1];
@@ -217,7 +221,7 @@ namespace CodeBase.Gameplay.AI.MLAgents
                 TargetIds = targets
             };
 
-            CalculateReward();
+            //CalculateReward();
 
             if (skillState.Cooldown > 0)
             {

@@ -19,7 +19,7 @@ namespace CodeBase.Gameplay.AI.Reporting
         
         public void ReportDecisionDetails(BattleSkill skill, IHero target, List<ScoreFactor> scoreFactors)
         {
-          HeroBehaviour caster = _registry.GetHero(skill.casterId);
+          /*HeroBehaviour caster = _registry.GetHero(skill.casterId);
           HeroBehaviour targetHero = _registry.GetHero(target.Id);
           DecisionDetails details = new DecisionDetails
           {
@@ -33,12 +33,12 @@ namespace CodeBase.Gameplay.AI.Reporting
                 .ToArray())
           };
           
-          DecisionDetailsReported?.Invoke(details);
+          DecisionDetailsReported?.Invoke(details);*/
         }
         
         public void ReportDecisionScores(IHero readyHero, List<ScoredAction> choices)
         {
-          HeroBehaviour caster = _registry.GetHero(readyHero.Id);
+          /*HeroBehaviour caster = _registry.GetHero(readyHero.Id);
           DecisionScores scores = new DecisionScores
           {
             HeroName = $"{caster.TypeId} [{caster.SlotNumber}]",
@@ -49,7 +49,7 @@ namespace CodeBase.Gameplay.AI.Reporting
                 .ToArray())
           };
         
-          DecisionScoresReported?.Invoke(scores);
+          DecisionScoresReported?.Invoke(scores);*/
         }
     }
 }

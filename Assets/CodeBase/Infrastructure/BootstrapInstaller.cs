@@ -13,6 +13,7 @@ using CodeBase.Gameplay.Skills;
 using CodeBase.Gameplay.Skills.Targeting;
 using CodeBase.Gameplay.UI;
 using CodeBase.Infrastructure.StaticData;
+using CodeBase.MetricsCollector;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -37,6 +38,8 @@ namespace CodeBase.Infrastructure
             Container.Bind<IInitiativeService>().To<InitiativeService>().AsSingle();
             Container.Bind<ITargetPicker>().To<TargetPicker>().AsSingle();
             Container.Bind<IArtificialIntelligence>().To<UtilityAI>().AsSingle();
+            
+            Container.Bind<IMetricsService>().To<MetricsService>().AsSingle();
         }
 
         public void Initialize()
